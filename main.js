@@ -1,7 +1,6 @@
 import './style.css'
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { arraySlice } from 'three/src/animation/AnimationUtils';
 
 const scene = new THREE.Scene();
 
@@ -46,6 +45,7 @@ function addStar() {
   scene.add(star)
 }
 
+
 Array(200).fill().forEach(addStar)
 
 // todo: Add page loader to scene
@@ -64,6 +64,44 @@ const hayden = new THREE.Mesh(
 
 scene.add(hayden)
 
+// Mars
+
+const marsTexture = new THREE.TextureLoader().load('mars_Flat.jpg');
+const normalTexture = new THREE.TextureLoader().load('v-texture.jpg');
+
+const mars = new THREE.Mesh(
+  new THREE.SphereGeometry(3 ,32, 32),
+  new THREE.MeshStandardMaterial( {
+    map: marsTexture,
+    normalMap: normalTexture,
+  }
+  )
+);
+
+scene.add(mars)
+
+mars.position.z = 10;
+mars.position.setX(-10);
+
+function moveCamera() {
+
+  const t = document.body.getBoundingClientRect().top;
+  mars.rotation.z += 0.05;
+  mars.rotation.y += 0.075;
+  mars.rotation.z += 0.05;
+  
+  hayden.rotation.x += 0.01;
+  hayden.rotation.y += 0.01;
+
+  camera.position.z = t * -0.01;
+  camera.position.x = t * -0.00002;
+  camera.position.y = t * -0.002;
+
+
+}
+
+document.body.onscroll = moveCamera
+
 
 function animate() {
   requestAnimationFrame (animate);
@@ -71,10 +109,6 @@ function animate() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.005;
   torus.rotation.z += 0.01;
-
-  hayden.rotation.x += 0.001;
-  hayden.rotation.y += 0.0005;
-  hayden.rotation.z += 0.001;
 
   controls.update
   
